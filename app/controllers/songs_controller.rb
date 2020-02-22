@@ -43,16 +43,12 @@ end
   end
 
   def edit
-    artist_exists = Artist.exists? params[:artist_id]
-    if params[:artist_id] and not artist_exists
-      redirect_to artists_path, alert: "Artist not found"
-    elsif params[:artist_id] and artist_exists
-      if not (@song = Song.joins(:artist).where(artist_id: params[:artist_id]).where(id: params[:id]).first)
-        redirect_to artist_songs_path(params[:artist_id]), alert: "Song not found"
-      end
-    else
-      redirect_to(songs_path, alert: "Song not found") if not (@song = Song.find_by(id: params[:id]))
+  if params[:artist_id]
+      @artist = Artist.find_by(id: params[:artist_id])
+      @song = @artist.songs.find_by(id: params[:id])
+      
     end
+
   end
 
   def update
